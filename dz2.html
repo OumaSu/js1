@@ -15,16 +15,17 @@
     //     если a и b положительные, вывести их разность;
     //     если а и b отрицательные, вывести их произведение;
     //     если а и b разных знаков, вывести их сумму; ноль можно считать положительным числом.### 
-    let a = prompt('promt a');
-    let b = prompt('promt b');
-
+    let a = Number.parseInt(prompt('promt a'));
+    let b = Number.parseInt(prompt('promt b'));
+    let result;
     if (a >= 0 & b >= 0) {
-        return a - b;
+        result = (a - b);
     } else if (a < 0 & b < 0) {
-        return a * b;
+        result = (a * b);
     } else {
-        return a + b;
+        result = (a + b);
     }
+    alert(result);
 
     // 4. Присвоить переменной а значение в промежутке[0..15].С помощью оператора switch организовать вывод чисел от a до 15. ### 
     // не совсем понял что значит через свич, имеется в виду что сделать свич с 16 кейсами?
@@ -33,8 +34,9 @@
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min;
     }
-    let a = getRandomInt(0, 15);
-    for (let index = a; index <= 15; index++) {
+    let aRandom = getRandomInt(0, 15);
+    alert(`start value ${aRandom}`);
+    for (let index = aRandom; index <= 15; index++) {
         alert(index);
     }
 
