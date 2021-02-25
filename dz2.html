@@ -34,11 +34,53 @@
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min;
     }
-    let aRandom = getRandomInt(0, 15);
-    alert(`start value ${aRandom}`);
-    for (let index = aRandom; index <= 15; index++) {
-        alert(index);
+
+    function alertCurrentWithIncrement(current) {
+        alert(current);
+        return ++current;
     }
+    let aRandom = getRandomInt(0, 15);
+
+
+    switch (aRandom) {
+        case 0:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 1:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 2:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 3:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 4:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 5:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 6:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 7:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 8:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 9:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 10:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 11:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 12:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 13:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 14:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 15:
+            aRandom = alertCurrentWithIncrement(aRandom);
+            break;
+    }
+
+    // for (let index = aRandom; index <= 15; index++) {
+    //     alert(index);
+    // }
 
     // 5. Реализовать основные 4 арифметические операции в виде функций с двумя параметрами.Обязательно использовать оператор return.### 
 
@@ -61,6 +103,20 @@
     // 6. Реализовать функцию с тремя параметрами: function mathOperation(arg1, arg2, operation), где arg1, arg2 – значения аргументов, operation – строка с названием операции.В зависимости от переданного значения операции выполнить одну из арифметических операций(использовать функции из пункта 3) и вернуть полученное значение(использовать switch). ### 
 
     function mathOperation(arg1, arg2, operation) {
+        switch (operation) {
+            case 'sum':
+                sum(arg1, arg2);
+                break;
+            case 'sub':
+                sub(arg1, arg2);
+                break;
+            case 'div':
+                div(arg1, arg2);
+                break;
+            case 'mul':
+                mul(arg1, arg2);
+                break;
+        }
         return operation(arg1, arg2);
     }
 
