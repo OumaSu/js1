@@ -1,0 +1,134 @@
+<script>
+    // var a = 1, b = 1, c, d;
+    // c = ++a; alert(c);           // 2 ++ - инркремент возвращающий а+1 
+    // d = b++; alert(d);           // 1 инкремент, однако возвращающий старое значение Б, поэтому Д получается равным Б, однако значение Б становится 2
+    // c = (2 + ++a); alert(c);      // 5 = (2+ 1 + 2) значение А становится 3
+    // d = (2 + b++); alert(d);      // 4 = (2 + 2) однако значение Б становится 3
+    // alert(a);                    // 3
+    // alert(b);                    // 3
+
+    // 2. Чему будет равен x в примере ниже ?
+    //     var a = 2;
+    //     var x = 1 + (a *= 2); = 1 + 2 * 2  = 5
+
+    // 3. Объявить две целочисленные переменные a и b и задать им произвольные начальные значения.Затем написать скрипт, который работает по следующему принципу:
+    //     если a и b положительные, вывести их разность;
+    //     если а и b отрицательные, вывести их произведение;
+    //     если а и b разных знаков, вывести их сумму; ноль можно считать положительным числом.### 
+    let a = Number.parseInt(prompt('promt a'));
+    let b = Number.parseInt(prompt('promt b'));
+    let result;
+    if (a >= 0 && b >= 0) {
+        result = (a - b);
+    } else if (a < 0 && b < 0) {
+        result = (a * b);
+    } else {
+        result = (a + b);
+    }
+    alert(result);
+
+    // 4. Присвоить переменной а значение в промежутке[0..15].С помощью оператора switch организовать вывод чисел от a до 15. ### 
+    // не совсем понял что значит через свич, имеется в виду что сделать свич с 16 кейсами?
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    function alertCurrentWithIncrement(current) {
+        alert(current);
+        return ++current;
+    }
+    let aRandom = getRandomInt(0, 15);
+
+
+    switch (aRandom) {
+        case 0:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 1:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 2:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 3:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 4:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 5:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 6:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 7:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 8:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 9:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 10:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 11:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 12:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 13:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 14:
+            aRandom = alertCurrentWithIncrement(aRandom);
+        case 15:
+            aRandom = alertCurrentWithIncrement(aRandom);
+            break;
+    }
+
+    // for (let index = aRandom; index <= 15; index++) {
+    //     alert(index);
+    // }
+
+    // 5. Реализовать основные 4 арифметические операции в виде функций с двумя параметрами.Обязательно использовать оператор return.### 
+
+    function sum(arg1, arg2) {
+        return arg1 + arg2;
+    }
+
+    function sub(arg1, arg2) {
+        return arg1 - arg2;
+    }
+
+    function div(arg1, arg2) {
+        return arg1 / arg2;
+    }
+
+    function mul(arg1, arg2) {
+        return arg1 * arg2;
+    }
+
+    // 6. Реализовать функцию с тремя параметрами: function mathOperation(arg1, arg2, operation), где arg1, arg2 – значения аргументов, operation – строка с названием операции.В зависимости от переданного значения операции выполнить одну из арифметических операций(использовать функции из пункта 3) и вернуть полученное значение(использовать switch). ### 
+
+    function mathOperation(arg1, arg2, operation) {
+        switch (operation) {
+            case 'sum':
+                sum(arg1, arg2);
+                break;
+            case 'sub':
+                sub(arg1, arg2);
+                break;
+            case 'div':
+                div(arg1, arg2);
+                break;
+            case 'mul':
+                mul(arg1, arg2);
+                break;
+        }
+    }
+
+    // 7. * Сравнить null и 0. Попробуйте объяснить результат.### 
+
+    // null в примитивном приведении типов при сравнении обращается в +0 следовательно он может быть только больше либо равен нуля для остальных случаев будет false при сравнении
+
+    // 8. * С помощью рекурсии организовать функцию возведения числа в степень.Формат: function power(val, pow), где val – заданное число, pow – степень.
+
+    function power(val, pow) {
+        if (pow == 1) {
+            return val;
+        }
+        return val * power(val, pow - 1);
+    }
+</script>
