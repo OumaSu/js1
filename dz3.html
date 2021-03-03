@@ -1,0 +1,60 @@
+<script>
+    // 1. С помощью цикла while вывести все простые числа в промежутке от 0 до 100.
+    function isSimple(num) {
+        if (num <= 1) {
+            return false;
+        }
+        let result = true;
+        for (let i = num - 1; i > 1; --i) {
+            if (num % i == 0) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
+    let counter = 0;
+    while (counter <= 100) {
+        if (isSimple(counter)) {
+            console.error(counter);
+        }
+        ++counter;
+    }
+    // 2. С этого урока начинаем работать с функционалом интернет - магазина.Предположим, есть сущность корзины.Нужно реализовать функционал подсчета стоимости корзины в зависимости от находящихся в ней товаров.Товары в корзине хранятся в массиве.Задачи:
+    //     a) Организовать такой массив для хранения товаров в корзине;
+    //     b) Организовать функцию countBasketPrice, которая будет считать стоимость корзины.
+    class BasketPosition {
+        constructor(name, amount, price) {
+            this.name = name;
+            this.amount = amount;
+            this.price = price;
+        }
+    }
+
+    let basket = [
+        new BasketPosition('сапоги', 10, 450),
+        new BasketPosition('валенки', 2, 200),
+        new BasketPosition('носки черные', 30, 55),
+        new BasketPosition('джинсы', 3, 990),
+        new BasketPosition('кофта', 2, 1590),
+        new BasketPosition('мешок' 1, 20),
+    ];
+
+    function countBasketPrice(basket) {
+        return basket.reduce((acc, curr) => acc + curr.amount * curr.price);
+    }
+    // 3. * Вывести с помощью цикла for числа от 0 до 9, не используя тело цикла.Выглядеть это должно так:
+    //     for (…) {// здесь пусто}
+
+    for (let i = 0; i <= 9; alert(i++));
+
+    // 4. * Нарисовать пирамиду с помощью console.log, как показано на рисунке, только у вашей пирамиды должно быть 20 рядов, а не 5:
+
+    function piramidDraw(heigth = 20) {
+        for (let i = 1; i <= heigth; ++i) {
+            console.log(Array(i).fill('*').join(''));
+        }
+    }
+
+</script>
