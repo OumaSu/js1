@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        // 1. Создать функцию, генерирующую шахматную доску. При этом можно использовать любые html-теги по своему желанию. Доска должна быть разлинована соответствующим образом, т.е. чередовать черные и белые ячейки. Строки должны нумероваться числами от 1 до 8, столбцы – латинскими буквами A, B, C, D, E, F, G, H.
+
+        // 2*. Заполнить созданную таблицу буквами, отвечающими за шахматную фигуру, например К – король, Ф – ферзь и т.п.,
+        let literals = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+        let figures = ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'R', 'KN', 'B', 'K', 'Q', 'B', 'KN', 'R',];
+        function isEven(arg) {
+            return arg % 2 == 0;
+        }
+        function fillTable() {
+            let tables = document.getElementsByTagName('table');
+            if (tables.length) {
+                for (const table of tables) {
+                    table.remove();
+                }
+            }
+            let table = document.createElement("table");
+
+            for (let row = 8; row >= 1; row--) {
+                table.append(buildRow(row));
+            }
+            document.body.append(table);
+        }
+
+        function buildRow(index) {
+            let row = document.createElement("tr")
+            for (let i = 1; i <= literals.length; i++) {
+                let div = document.createElement("td");
+                div.innerHTML = `${literals[i - 1]}${index}`;
+                if (index % 2 == i % 2) {
+                    div.className = "white";
+                }
+                else {
+                    div.className = "black"
+                }
+                row.append(div);
+            }
+            return row;
+        }
+
+        function placeFigures() {
+            let divs = document.getElementsByTagName('td');
+            let topFigures = [];
+            for (let index = figures.length - 1; index >= 0; index--) {
+                topFigures.push(figures[index]);
+            }
+            for (let index = 0; index < topFigures.length; index++) {
+                placeFigure(topFigures[index], divs[index]);
+            }
+            for (let index = figures.length - 1; index >= 0; index--) {
+                placeFigure(figures[index], divs[divs.length - 1 - (figures.length - 1 - index)]);
+            }
+        }
+
+        function placeFigure(figure, div) {
+            div.innerHTML += ` ${figure}`;
+        }
+
+    </script>
+</head>
+
+<body>
+    <style>
+        td {
+            width: 4vw;
+            height: 4vw;
+            text-align: center;
+        }
+
+        .black {
+            background-color: black;
+            color: white;
+        }
+
+        .white {
+            background-color: white;
+            color: black;
+        }
+    </style>
+    <button onclick="fillTable()">table</button>
+    <button onclick="placeFigures()">figures</button>
+</body>
+
+</html>
