@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+
+        // 3. Сделать генерацию корзины динамической: верстка корзины не должна находиться в HTML-структуре. Там должен быть только div, в который будет вставляться корзина, сгенерированная на базе JS:
+        // 3.1. Пустая корзина должна выводить строку «Корзина пуста»;
+        // 3.2. Наполненная должна выводить «В корзине: n товаров на сумму m рублей».
+
+        // 4*. Сделать так, чтобы товары в каталоге выводились при помощи JS:
+        // 4.1. Создать массив товаров (сущность Product);
+        // 4.2. При загрузке страницы на базе данного массива генерировать вывод из него. HTML-код должен содержать только div id=”catalog” без вложенного кода. Весь вид каталога генерируется JS.
+
+        class Product {
+            constructor(id, name, price, brand, imgs, info, amount) {
+                this.id = id;
+                this.name = name;
+                this.price = price;
+                this.brand = brand;
+                this.imgs = imgs;
+                this.info = info;
+                this.amount = amount;
+            }
+        }
+
+        let productStore = [
+            new Product(1, 'name_1', 1000, 'brand_1', [
+                './dz5_imgs/featured__img1.svg',
+                './dz5_imgs/featured__img2.svg',
+                './dz5_imgs/featured__img3.svg',
+                './dz5_imgs/featured__img4.svg',
+                './dz5_imgs/featured__img5.svg',
+                './dz5_imgs/featured__img6.svg',
+            ], 'info_1'),
+            new Product(2, 'name_2', 909, 'brand_2', [
+                './dz5_imgs/featured__img1.svg',
+                './dz5_imgs/featured__img2.svg',
+                './dz5_imgs/featured__img3.svg',
+                './dz5_imgs/featured__img4.svg',
+                './dz5_imgs/featured__img5.svg',
+                './dz5_imgs/featured__img6.svg',
+            ], 'info_2'),
+            new Product(3, 'name_3', 107, 'brand_3', [
+                './dz5_imgs/featured__img1.svg',
+                './dz5_imgs/featured__img2.svg',
+                './dz5_imgs/featured__img3.svg',
+                './dz5_imgs/featured__img4.svg',
+                './dz5_imgs/featured__img5.svg',
+                './dz5_imgs/featured__img6.svg',
+            ], 'info_3'),
+            new Product(4, 'name_4', 33, 'brand_4', [
+                './dz5_imgs/featured__img1.svg',
+                './dz5_imgs/featured__img2.svg',
+                './dz5_imgs/featured__img3.svg',
+                './dz5_imgs/featured__img4.svg',
+                './dz5_imgs/featured__img5.svg',
+                './dz5_imgs/featured__img6.svg',
+            ], 'info_4'),
+            new Product(5, 'name_5', 9.56, 'brand_5', [
+                './dz5_imgs/featured__img1.svg',
+                './dz5_imgs/featured__img2.svg',
+                './dz5_imgs/featured__img3.svg',
+                './dz5_imgs/featured__img4.svg',
+                './dz5_imgs/featured__img5.svg',
+                './dz5_imgs/featured__img6.svg',
+            ], 'info_5'),
+            new Product(6, 'name_6', 179, 'brand_6', [
+                './dz5_imgs/featured__img1.svg',
+                './dz5_imgs/featured__img2.svg',
+                './dz5_imgs/featured__img3.svg',
+                './dz5_imgs/featured__img4.svg',
+                './dz5_imgs/featured__img5.svg',
+                './dz5_imgs/featured__img6.svg',
+            ], 'info_6'),
+        ];
+
+        function getProduct(id) {
+            return productStore.filter(i => i.id == id)[0];
+        }
+
+        function showStore() {
+            let productsContainer = document.getElementById('products__id');
+            productsContainer.style.display = 'flex';
+            productStore.forEach(
+                i => productsContainer.append(buildStoreProduct(i))
+            );
+            updateTotal();
+        }
+
+        function buildStoreProduct(product) {
+            let result = document.createElement('div');
+            result.className = 'product__container';
+
+            let id = document.createElement('div')
+            id.id = product.id;
+            id.style.display = 'none';
+
+            let name = document.createElement('div');
+            name.className = 'product__name';
+            name.innerText = product.name;
+
+            let price = document.createElement('div');
+            price.className = 'product__price';
+            price.innerText = `${product.price}$`;
+
+            let brand = document.createElement('div');
+            brand.className = 'product__brand';
+            brand.innerText = product.brand;
+
+            let img = document.createElement('img');
+            img.className = 'product__img';
+            img.setAttribute('src', product.imgs[0]);
+            img.onclick = 'showImgs()';
+            img.style.cssText = 'width: 100%'
+
+            let info = document.createElement('div');
+            info.className = 'product__info';
+            info.innerText = product.info;
+
+            let add = document.createElement('button');
+            add.className = 'product__add';
+            add.innerText = 'Add';
+            add.onclick = function addToBasket() {
+                updateBasketPostion(product.id);
+            };
+
+            result.append(id, name, brand, img, info, price, add);
+            result.style.cssText = "width: 200px; border: 1px solid black"
+            return result;
+        }
+
+        let basket = [];
+
+        function updateBasketPostion(id) {
+            let basketContainer = document.getElementById('basket__id');
+            let position = basketContainer.querySelector(`[id = '${id}']`);
+            let product = getProduct(id);
+            if (position == null) {
+                product.amount = 1;
+                basketContainer.append(buildBasketPosition(product));
+                basket.push(product);
+
+            } else {
+                product.amount++;
+                updateBasketPositionTotalPrice(product);
+            }
+            updateTotal();
+        }
+
+        function updateBasketPositionTotalPrice(product) {
+            let price = document.getElementById('basket__id')
+                .querySelector(`[id = '${product.id}'] ~ .product__price`);
+            price.innerText = `${product.price * product.amount}$`;
+        }
+
+        function updateTotal() {
+            let total = document.getElementById('total');
+            if (basket.length == 0) {
+                total.innerText = 'basket empty'
+            }
+            else {
+                total.innerText = `total cost: ${basket.reduce((prev, curr) => prev + curr.price * curr.amount, 0)}`;
+            }
+        }
+
+        function removeProduct(product) {
+            basket = basket.filter(i => i.id !== product.id);
+            document.querySelector(`[id = 'basket__id'] [id = '${product.id}']`)
+                .parentNode.remove();
+            updateTotal();
+        }
+
+        function clearBasket() {
+            basket = [];
+            let basketContainer = document.getElementById('basket__id');
+            while (basketContainer.firstChild) {
+                basketContainer.firstChild.remove();
+            }
+            updateTotal();
+        }
+
+        function buildBasketPosition(product) {
+            let result = document.createElement('div');
+            result.className = 'product__container';
+
+            let id = document.createElement('div')
+            id.id = product.id;
+            id.style.display = 'none';
+
+            let name = document.createElement('div');
+            name.className = 'product__name';
+            name.innerText = product.name;
+
+            let price = document.createElement('div');
+            price.className = 'product__price';
+            price.innerText = `${product.price * product.amount}$`;
+
+            let remove = document.createElement('button');
+            remove.className = 'product__remove';
+            remove.innerText = 'remove';
+            remove.onclick = function removeFromBasket() {
+                removeProduct(product);
+            };
+
+            result.append(id, name, price, remove);
+            result.style.cssText = "width: 200px; border: 1px solid black"
+            return result;
+        }
+    </script>
+</head>
+
+<body>
+    <button onclick="showStore()">show store</button>
+    <div id="products__id" class="products">
+    </div>
+    <hr>
+    <p>basket</p>
+    <div id="basket__id" class="basket"></div>
+    <div id="total" class="total"></div>
+    <button onclick="clearBasket()">clear basket</button>
+</body>
+
+</html>
