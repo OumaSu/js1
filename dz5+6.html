@@ -17,19 +17,26 @@
         // 4.2. При загрузке страницы на базе данного массива генерировать вывод из него. HTML-код должен содержать только div id=”catalog” без вложенного кода. Весь вид каталога генерируется JS.
 
         class Product {
-            constructor(id, name, price, brand, imgs, info, amount) {
+            constructor(id, name, price, brand, mainImg, imgs, info, amount) {
                 this.id = id;
                 this.name = name;
                 this.price = price;
                 this.brand = brand;
+                this.mainImg = mainImg
                 this.imgs = imgs;
                 this.info = info;
                 this.amount = amount;
             }
         }
 
+        class ImgsModal {
+            constructor(imgs) {
+                this.imgs = imgs
+            }
+        }
+
         let productStore = [
-            new Product(1, 'name_1', 1000, 'brand_1', [
+            new Product(1, 'name_1', 1000, 'brand_1', './dz5_imgs/featured__img1.svg', [
                 './dz5_imgs/featured__img1.svg',
                 './dz5_imgs/featured__img2.svg',
                 './dz5_imgs/featured__img3.svg',
@@ -37,7 +44,7 @@
                 './dz5_imgs/featured__img5.svg',
                 './dz5_imgs/featured__img6.svg',
             ], 'info_1'),
-            new Product(2, 'name_2', 909, 'brand_2', [
+            new Product(2, 'name_2', 909, 'brand_2', './dz5_imgs/featured__img2.svg', [
                 './dz5_imgs/featured__img1.svg',
                 './dz5_imgs/featured__img2.svg',
                 './dz5_imgs/featured__img3.svg',
@@ -45,7 +52,7 @@
                 './dz5_imgs/featured__img5.svg',
                 './dz5_imgs/featured__img6.svg',
             ], 'info_2'),
-            new Product(3, 'name_3', 107, 'brand_3', [
+            new Product(3, 'name_3', 107, 'brand_3', './dz5_imgs/featured__img3.svg', [
                 './dz5_imgs/featured__img1.svg',
                 './dz5_imgs/featured__img2.svg',
                 './dz5_imgs/featured__img3.svg',
@@ -53,7 +60,7 @@
                 './dz5_imgs/featured__img5.svg',
                 './dz5_imgs/featured__img6.svg',
             ], 'info_3'),
-            new Product(4, 'name_4', 33, 'brand_4', [
+            new Product(4, 'name_4', 33, 'brand_4', './dz5_imgs/featured__img4.svg', [
                 './dz5_imgs/featured__img1.svg',
                 './dz5_imgs/featured__img2.svg',
                 './dz5_imgs/featured__img3.svg',
@@ -61,7 +68,7 @@
                 './dz5_imgs/featured__img5.svg',
                 './dz5_imgs/featured__img6.svg',
             ], 'info_4'),
-            new Product(5, 'name_5', 9.56, 'brand_5', [
+            new Product(5, 'name_5', 9.56, 'brand_5', './dz5_imgs/featured__img5.svg', [
                 './dz5_imgs/featured__img1.svg',
                 './dz5_imgs/featured__img2.svg',
                 './dz5_imgs/featured__img3.svg',
@@ -69,7 +76,7 @@
                 './dz5_imgs/featured__img5.svg',
                 './dz5_imgs/featured__img6.svg',
             ], 'info_5'),
-            new Product(6, 'name_6', 179, 'brand_6', [
+            new Product(6, 'name_6', 179, 'brand_6', './dz5_imgs/featured__img6.svg', [
                 './dz5_imgs/featured__img1.svg',
                 './dz5_imgs/featured__img2.svg',
                 './dz5_imgs/featured__img3.svg',
@@ -114,8 +121,10 @@
 
             let img = document.createElement('img');
             img.className = 'product__img';
-            img.setAttribute('src', product.imgs[0]);
-            img.onclick = 'showImgs()';
+            img.setAttribute('src', product.mainImg);
+            img.onclick = function openModal() {
+                drawImgsModal(product.imgs);
+            }
             img.style.cssText = 'width: 100%'
 
             let info = document.createElement('div');
@@ -209,6 +218,70 @@
             result.append(id, name, price, remove);
             result.style.cssText = "width: 200px; border: 1px solid black"
             return result;
+        }
+
+        let currentImg;
+        let modalImgs;
+
+        function drawImgsModal(imgs) {
+            currentImg = imgs[0];
+            modalImgs = imgs;
+            let modalContainer = document.createElement('div');
+            modalContainer.id = 'modalContainer';
+            modalContainer.style.cssText = 'position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); display:flex; justify-content: center; align-items: center; flex-direction: column';
+            let leftSwitcher = document.createElement('button');
+            leftSwitcher.textContent = 'prev';
+            leftSwitcher.id = 'leftSwitcher'
+            leftSwitcher.onclick = function switchImg() {
+                currentImg = updateModalImg(false);
+                drawNewImg(currentImg);
+            }
+            let rightSwitcher = document.createElement('button');
+            rightSwitcher.textContent = 'next';
+            rightSwitcher.id = 'rightSwitcher'
+            rightSwitcher.onclick = function switchImg() {
+                currentImg = updateModalImg(true);
+                drawNewImg(currentImg);
+            }
+            let closeBtn = document.createElement('button');
+            closeBtn.id = 'closeBtn'
+            closeBtn.textContent = 'close';
+            closeBtn.onclick = function closeModal() {
+                closeImgModal();
+            }
+            let navContainer = document.createElement('div');
+            navContainer.id = 'nav__container';
+            navContainer.style.cssText = 'display: flex; justify-content: center; align-items: center; flex-direction: row'
+            navContainer.append(leftSwitcher, rightSwitcher, closeBtn);
+            modalContainer.append(buildCurrentModalImg(currentImg), navContainer);
+            document.querySelector('body').append(modalContainer);
+        }
+
+        function buildCurrentModalImg(img) {
+            let current = document.createElement('img');
+            current.id = 'current_img_id';
+            current.setAttribute('src', img);
+            return current;
+        }
+
+        function updateModalImg(isNext) {
+            let currentIndex = modalImgs.indexOf(currentImg);
+            let nextIndex;
+            if (isNext) {
+                nextIndex = (currentIndex + 1) % modalImgs.length;
+            }
+            else {
+                nextIndex = (currentIndex + modalImgs.length - 1) % modalImgs.length;
+            }
+            return modalImgs[nextIndex]
+        }
+
+        function drawNewImg(img) {
+            document.getElementById('current_img_id').setAttribute('src', img);
+        }
+
+        function closeImgModal() {
+            document.getElementById('modalContainer').remove();
         }
     </script>
 </head>
